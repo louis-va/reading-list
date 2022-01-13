@@ -2,7 +2,7 @@ let library = [];
 let id = 1;
 
 function Book(title, author, pages, read) {
-    this.id = id++;
+    this.id = "book_" + id++;
     this.title = title;
     this.author = author;
     this.pages = pages;
@@ -13,21 +13,24 @@ function Book(title, author, pages, read) {
 Book.prototype.isRead = () => (this.read) ? "You read that book" : "You haven't read that book";
 Book.prototype.info = () => `${this.title} by ${this.author}, ${this.pages} pages. ${this.isRead()}.`;
 
+function addBooktoLibrary(book) {
+    library.push(book);
+    displayBook(book);
+}
+
 function displayBook(book) {
-    let bookParameters = ["id", "title", "author", "pages", "read"];
+    let bookParameters = ["title", "author", "pages", "read"];
     let td;
     let tr = document.createElement('tr');
+    tr.setAttribute('id', book.id);
+
     bookParameters.forEach(param => {
         td = document.createElement('td');
         td.textContent = book[param];
         tr.appendChild(td)
     })
-    document.querySelector('#book_table').appendChild(tr);
-}
 
-function addBooktoLibrary(book) {
-    library.push(book);
-    displayBook(book);
+    document.querySelector('#book_table').appendChild(tr);
 }
 
 document.querySelector("form#add_book").onsubmit = (e) => {
