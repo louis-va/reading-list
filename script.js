@@ -1,3 +1,5 @@
+"use strict";
+
 let library = [];
 let id = 1;
 
@@ -10,8 +12,13 @@ function Book(title, author, pages, read) {
     addBooktoLibrary(this);
 }
 
-Book.prototype.isRead = () => (this.read) ? "You read that book" : "You haven't read that book";
-Book.prototype.info = () => `${this.title} by ${this.author}, ${this.pages} pages. ${this.isRead()}.`;
+Book.prototype.changeReadStatus = function() {
+    this.read = this.read ? false : true;
+}
+
+Book.prototype.info = function() {
+    `${this.title} by ${this.author}, ${this.pages} pages.`;
+}
 
 function addBooktoLibrary(book) {
     library.push(book);
@@ -20,26 +27,31 @@ function addBooktoLibrary(book) {
 
 function removeBookFromLibrary(bookId) {
     library = library.filter(book => book.id != bookId);
+    hideBook(bookId);
 }
 
 function displayBook(book) {
-    let bookParameters = ["title", "author", "pages", "read"];
     let td;
     let tr = document.createElement('tr');
     tr.setAttribute('id', book.id);
 
-    bookParameters.forEach(param => {
+    ["title", "author", "pages"].forEach(param => {
         td = document.createElement('td');
         td.textContent = book[param];
         tr.appendChild(td)
     })
 
+    let readCheckbox = document.createElement('input');
+    readCheckbox.setAttribute('type', 'checkbox');
+    readCheckbox.checked = book.read;
+    readCheckbox.addEventListener('click', () => book.changeReadStatus());
+    td = document.createElement('td');
+    td.appendChild(readCheckbox);
+    tr.appendChild(td);
+
     let deleteButton = document.createElement('button');
     deleteButton.textContent = "delete";
-    deleteButton.addEventListener('click', () => {
-        removeBookFromLibrary(book.id);
-        hideBook(book.id);
-    });
+    deleteButton.addEventListener('click', () => removeBookFromLibrary(book.id));
     td = document.createElement('td');
     td.appendChild(deleteButton);
     tr.appendChild(td);
@@ -60,7 +72,7 @@ document.querySelector("form#add_book").onsubmit = (e) => {
     new Book(name, author, pages, read);
 }
 
-new Book('The Hobbit', 'J.R.R. Tolkien', '295', false);
+let book1 = new Book('The Hobbit', 'J.R.R. Tolkien', '295', false);
 new Book('The Fellowship of the Ring', 'J.R.R. Tolkien', '452', true);
 new Book('The Two Towers', 'J.R.R. Tolkien', '632', false);
 new Book('The Return of the King', 'J.R.R. Tolkien', '345', false);
