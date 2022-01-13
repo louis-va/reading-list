@@ -13,15 +13,40 @@
         <table>
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Title</th>
                     <th>Author</th>
                     <th>Pages</th>
                     <th>Read</th>
                 </tr>
             </thead>
-            <tbody id="bookTable">
+            <tbody id="book_table">
             </tbody>
         </table>
+        <h2>Add a book</h2>
+        <form id="add_book">
+            <div>
+                <label for="name">Name</label><br>
+                <input type="text" id="name" name="name">
+            </div>
+            <div>
+                <label for="author">Author</label><br>
+                <input type="text" id="author" name="author">
+            </div>
+            <div>
+                <label for="pages">Number of pages</label><br>
+                <input type="number" id="pages" name="pages">
+            </div>
+            <div>
+                <input type="radio" id="read_yes" name="read" value="yes">
+                <label for="read_yes">I read this book</label><br>
+                <input type="radio" id="read_no" name="read" value="no">
+                <label for="read_no">I haven't read this book</label><br>
+            </div>
+            <div>
+                <button type="submit">Add to library</button>
+            </div>
+        </form> 
     </section>
 </body>
 <script src="script.js"></script>

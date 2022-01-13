@@ -42,3 +42,8 @@ th, td {
     border: 1px solid #CCC;
     text-align: left;
 }
+
+/* FORM */
+form>div {
+    margin-bottom: 10px;
+}
