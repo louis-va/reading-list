@@ -4,53 +4,58 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library</title>
+    <title>Reading list</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="sortable.css" />
 </head>
 <body>
     <section class="main">
-        <div>
-            <h2>Books in the library</h2>
-            <table>
+        <div class="wrapper">
+            <div class="header">
+                <h1>My reading list</h1>
+                <button class="add-book-btn">
+                    Add a book
+                </button>
+            </div>
+            <table class="sortable-theme-bootstrap" data-sortable>
                 <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Pages</th>
-                        <th>Read</th>
+                        <th style="width: 35%" data-sorted="true" data-sorted-direction="descending">Title</th>
+                        <th style="width: 35%">Author</th>
+                        <th data-sortable-type="numeric">Pages</th>
+                        <th>Status</th>
+                        <th data-sortable="false" style="width:50px"></th>
                     </tr>
                 </thead>
-                <tbody id="book_table">
+                <tbody>
+                    <tr class="add-book collapse">
+                        <form id="add_book">
+                            <td><input type="text" id="name" name="name"></td>
+                            <td><input type="text" id="author" name="author"></td>
+                            <td><input type="number" id="pages" name="pages"></td>
+                            <td>
+                                <select name="status" id="status">
+                                    <option value="Not read">Not read</option>
+                                    <option value="Reading">Reading</option>
+                                    <option value="Finished">Finished</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="plus-icon">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </button>
+                            </td>
+                        </form>
+                    </tr>
                 </tbody>
+                <tbody><tr><td style="border: 0; padding: 0; padding-top: 1px;"></td></tr></tbody>
+                <tbody id="book_table"></tbody>
             </table>
-        </div>
-        <div>
-            <h2>Add a book</h2>
-            <form id="add_book">
-                <div>
-                    <label for="name">Name</label><br>
-                    <input type="text" id="name" name="name">
-                </div>
-                <div>
-                    <label for="author">Author</label><br>
-                    <input type="text" id="author" name="author">
-                </div>
-                <div>
-                    <label for="pages">Number of pages</label><br>
-                    <input type="number" id="pages" name="pages">
-                </div>
-                <div>
-                    <input type="radio" id="read_yes" name="read" value="yes">
-                    <label for="read_yes">I read this book</label><br>
-                    <input type="radio" id="read_no" name="read" value="no">
-                    <label for="read_no">I haven't read this book</label><br>
-                </div>
-                <div>
-                    <button type="submit">Add to library</button>
-                </div>
-            </form> 
         </div>
     </section>
 </body>
+<script src="sortable.js"></script>
 <script src="script.js"></script>
 </html>
