@@ -25,6 +25,8 @@ p, h1, h2, h3, h4, h5, h6 {
 
 /* GENERAL */
 section.main {
+    display: flex;
+    gap: 30px;
     padding: 30px;
     font-family: sans-serif;
 }

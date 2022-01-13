@@ -18,6 +18,10 @@ function addBooktoLibrary(book) {
     displayBook(book);
 }
 
+function removeBookFromLibrary(bookId) {
+    library = library.filter(book => book.id != bookId);
+}
+
 function displayBook(book) {
     let bookParameters = ["title", "author", "pages", "read"];
     let td;
@@ -30,7 +34,21 @@ function displayBook(book) {
         tr.appendChild(td)
     })
 
+    let deleteButton = document.createElement('button');
+    deleteButton.textContent = "delete";
+    deleteButton.addEventListener('click', () => {
+        removeBookFromLibrary(book.id);
+        hideBook(book.id);
+    });
+    td = document.createElement('td');
+    td.appendChild(deleteButton);
+    tr.appendChild(td);
+
     document.querySelector('#book_table').appendChild(tr);
+}
+
+function hideBook(bookId) {
+    document.getElementById(bookId).remove();
 }
 
 document.querySelector("form#add_book").onsubmit = (e) => {
@@ -38,7 +56,7 @@ document.querySelector("form#add_book").onsubmit = (e) => {
     let name = document.querySelector("input[name='name']").value;
     let author = document.querySelector("input[name='author']").value;
     let pages = document.querySelector("input[name='pages']").value;
-    let read = document.querySelector("input[name='read']:checked").value == "y" ? true : false;
+    let read = document.querySelector("input[name='read']:checked").value == "yes" ? true : false;
     new Book(name, author, pages, read);
 }
 
