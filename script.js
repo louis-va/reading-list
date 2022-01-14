@@ -62,7 +62,10 @@ function displayBook(book) {
     status.innerHTML += `<option value="Finished" ${(book.status=="Finished")?"selected":""}>Finished</option>`
     deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="trash-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
 
-    status.addEventListener("change", () => book.setStatus(status.value));
+    status.addEventListener("change", () => {
+        book.setStatus(status.value);
+        sortTable();
+    });
     deleteBtn.addEventListener('click', () => {
         library.removeBook(book.id);
         hideBook(book.id);
