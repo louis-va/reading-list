@@ -1,65 +1,115 @@
 "use strict";
 
-let library = [];
-let id = 1;
+// Data Structures
 
 function Book(title, author, pages, status) {
-    this.id = "book_" + id++;
+    this.id = library.newBookId();
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.status = status;
-    addBooktoLibrary(this);
 }
 
-Book.prototype.setStatus = function(status) {
+Book.prototype.setStatus = function (status) {
     this.status = status;
 }
 
-function addBooktoLibrary(book) {
-    library.push(book);
-    displayBook(book);
+function Library() {
+    this.library = [];
+    this.id = 0;
 }
 
-function removeBookFromLibrary(bookId) {
-    library = library.filter(book => book.id != bookId);
-    hideBook(bookId);
+Library.prototype.addBook = function (book) {
+    this.library.push(book);
 }
+
+Library.prototype.removeBook = function (bookId) {
+    this.library = this.library.filter(book => book.id != bookId);
+}
+
+Library.prototype.newBookId = function () {
+    this.id++;
+    return "book_" + this.id;
+}
+
+const library = new Library();
+
+// User Interface
+
+const titleInput = document.querySelector("input[name='title']");
+const authorInput = document.querySelector("input[name='author']");
+const pagesInput = document.querySelector("input[name='pages']");
+const readInput = document.getElementById("status");
+const addBookBtn = document.querySelector("form#add_book");
 
 function displayBook(book) {
-    let td;
-    let tr = document.createElement('tr');
-    tr.setAttribute('id', book.id);
+    const table = document.querySelector('#book_table');
+    const row = document.createElement('tr');
+    const title = document.createElement('td');
+    const author = document.createElement('td');
+    const pages = document.createElement('td');
+    const statusCell = document.createElement('td');
+    const deleteCell = document.createElement('td');
+    const status = document.createElement('select');
+    const deleteBtn = document.createElement('button');
 
-    ["title", "author", "pages"].forEach(param => {
-        td = document.createElement('td');
-        td.textContent = book[param];
-        tr.appendChild(td)
-    })
+    row.setAttribute('id', book.id);
+    title.textContent = book["title"];
+    author.textContent = book["author"];
+    pages.textContent = book["pages"];
+    status.innerHTML += '<option value="Not read">Not read</option>'
+    status.innerHTML += '<option value="Reading">Reading</option>'
+    status.innerHTML += '<option value="Finished">Finished</option>'
+    document.querySelector(`option[value='${book.status}']`).selected = 'selected'
+    deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="trash-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
 
-    let statusSelect = document.createElement('select');
-    let selected;
-    ["Not read", "Reading", "Finished"].forEach(status => {
-        selected = status == book.status ? "selected" : "";
-        statusSelect.innerHTML += `<option value="${status}" ${selected}>${status}</option>`
-    })
-    statusSelect.addEventListener("change", () => book.setStatus(statusSelect.value));
-    td = document.createElement('td');
-    td.appendChild(statusSelect);
-    tr.appendChild(td);
+    status.addEventListener("change", () => book.setStatus(status.value));
+    deleteBtn.addEventListener('click', () => {
+        library.removeBook(book.id);
+        hideBook(book.id);
+    });
 
-    let deleteButton = document.createElement('button');
-    deleteButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="trash-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
-    deleteButton.addEventListener('click', () => removeBookFromLibrary(book.id));
-    td = document.createElement('td');
-    td.appendChild(deleteButton);
-    tr.appendChild(td);
-
-    document.querySelector('#book_table').appendChild(tr);
+    statusCell.appendChild(status)
+    deleteCell.appendChild(deleteBtn)
+    row.appendChild(title)
+    row.appendChild(author)
+    row.appendChild(pages)
+    row.appendChild(statusCell)
+    row.appendChild(deleteCell)
+    table.appendChild(row);
 }
 
 function hideBook(bookId) {
     document.getElementById(bookId).remove();
+}
+
+function getFormInput() {
+    let title = titleInput.value;
+    let author = authorInput.value;
+    let pages = parseInt(pagesInput.value);
+    let read = readInput.value;
+
+    (!title) ? titleInput.classList.add('error'): titleInput.classList.remove('error');
+    (!author) ? authorInput.classList.add('error'): authorInput.classList.remove('error');
+    (!pages) ? pagesInput.classList.add('error'): pagesInput.classList.remove('error');
+
+    if (title && author && pages) {
+        titleInput.value = "";
+        authorInput.value = "";
+        pagesInput.value = "";
+        read = "Not read";
+
+        return new Book(title, author, pages, read);
+    }
+}
+
+function addBook() {
+    e.preventDefault();
+
+    let newBook = getFormInput();
+    displayBook(newBook);
+    library.addBook(newBook);
+    sortTable();
 }
 
 function sortTable() {
@@ -68,43 +118,47 @@ function sortTable() {
     sortedColumn.click();
 }
 
-document.querySelector("form#add_book").onsubmit = (e) => {
-    e.preventDefault();
+addBookBtn.onsubmit = addBook;
 
-    let titleInput = document.querySelector("input[name='title']");
-    let authorInput = document.querySelector("input[name='author']");
-    let pagesInput = document.querySelector("input[name='pages']");
+// Create some books
 
-    let title = titleInput.value;
-    let author = authorInput.value;
-    let pages = parseInt(pagesInput.value);
-    let read = document.getElementById("status").value;
-    
-    // create book if all fields are filled
-    if(title && author && pages) {
-        new Book(title, author, pages, read);
-        titleInput.value = "";
-        authorInput.value = "";
-        pagesInput.value = "";
-        read = "Not read";
-        sortTable();
-    }
-    (!title) ? titleInput.classList.add('error') : titleInput.classList.remove('error');
-    (!author) ? authorInput.classList.add('error') : authorInput.classList.remove('error');
-    (!pages) ? pagesInput.classList.add('error') : pagesInput.classList.remove('error');
-}
+let book;
 
-new Book('The Hobbit', 'J.R.R. Tolkien', 295, 'Finished');
-new Book('The Fellowship of the Ring', 'J.R.R. Tolkien', 452, 'Reading');
-new Book('The Two Towers', 'J.R.R. Tolkien', 632, 'Not read');
-new Book('The Return of the King', 'J.R.R. Tolkien', 345, 'Not read');
-new Book('The Hunger Games', 'Suzanne Collins', 549, 'Not read');
-new Book('To Kill a Mockingbird', 'Harper Lee', 254, 'Not read');
-new Book('Pride and Prejudice', 'Jane Austen', 709, 'Not read');
-new Book('Animal Farm', 'George Orwell', 156, 'Not read');
-new Book('Gone with the Wind', 'Margaret Mitchell', 631, 'Not read');
-new Book('Memoirs of a Geicha', 'Arthur Golden', 690, 'Not read');
-new Book('Alice in Wonderland', 'Lewis Caroll', 254, 'Not read');
-new Book('Fahrenheit 451', 'Ray Bradbury', 254, 'Not read');
+book = new Book('The Hobbit', 'J.R.R. Tolkien', 295, 'Finished');
+displayBook(book);
+library.addBook(book);
+book = new Book('The Fellowship of the Ring', 'J.R.R. Tolkien', 452, 'Reading');
+displayBook(book);
+library.addBook(book);
+book = new Book('The Two Towers', 'J.R.R. Tolkien', 632, 'Not read');
+displayBook(book);
+library.addBook(book);
+book = new Book('The Return of the King', 'J.R.R. Tolkien', 345, 'Not read');
+displayBook(book);
+library.addBook(book);
+book = new Book('The Hunger Games', 'Suzanne Collins', 549, 'Not read');
+displayBook(book);
+library.addBook(book);
+book = new Book('To Kill a Mockingbird', 'Harper Lee', 254, 'Not read');
+displayBook(book);
+library.addBook(book);
+book = new Book('Pride and Prejudice', 'Jane Austen', 709, 'Not read');
+displayBook(book);
+library.addBook(book);
+book = new Book('Animal Farm', 'George Orwell', 156, 'Not read');
+displayBook(book);
+library.addBook(book);
+book = new Book('Gone with the Wind', 'Margaret Mitchell', 631, 'Not read');
+displayBook(book);
+library.addBook(book);
+book = new Book('Memoirs of a Geicha', 'Arthur Golden', 690, 'Not read');
+displayBook(book);
+library.addBook(book);
+book = new Book('Alice in Wonderland', 'Lewis Caroll', 254, 'Not read');
+displayBook(book);
+library.addBook(book);
+book = new Book('Fahrenheit 451', 'Ray Bradbury', 254, 'Not read');
+displayBook(book);
+library.addBook(book);
 
 setTimeout(sortTable, 10);
