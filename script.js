@@ -60,7 +60,7 @@ function displayBook(book) {
     status.innerHTML += '<option value="Not read">Not read</option>'
     status.innerHTML += '<option value="Reading">Reading</option>'
     status.innerHTML += '<option value="Finished">Finished</option>'
-    document.querySelector(`option[value='${book.status}']`).selected = 'selected'
+    document.querySelector(`option[value="${book.status}"]`).selected = 'selected'
     deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="trash-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
 
     status.addEventListener("change", () => book.setStatus(status.value));
@@ -103,13 +103,15 @@ function getFormInput() {
     }
 }
 
-function addBook() {
+function addBook(e) {
     e.preventDefault();
 
     let newBook = getFormInput();
-    displayBook(newBook);
-    library.addBook(newBook);
-    sortTable();
+    if(newBook) {
+        displayBook(newBook);
+        library.addBook(newBook);
+        sortTable();
+    }
 }
 
 function sortTable() {

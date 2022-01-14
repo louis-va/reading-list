@@ -101,7 +101,7 @@ button, select {
 }
 .add-book input:focus {
     border: 1px solid black;
-    outline: 3px solid rgba(0, 0, 0, 0.2);
+    outline: 3px solid rgba(0, 0, 0, 0.15);
 }
 
 .add-book input.error {
@@ -110,7 +110,7 @@ button, select {
 
 .add-book input.error:focus {
     border: 1px solid red;
-    outline: 3px solid rgba(255, 0, 0, 0.2);
+    outline: 3px solid rgba(255, 0, 0, 0.15);
 }
 
 /* HEADER */
