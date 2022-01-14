@@ -57,10 +57,9 @@ function displayBook(book) {
     title.textContent = book["title"];
     author.textContent = book["author"];
     pages.textContent = book["pages"];
-    status.innerHTML += '<option value="Not read">Not read</option>'
-    status.innerHTML += '<option value="Reading">Reading</option>'
-    status.innerHTML += '<option value="Finished">Finished</option>'
-    document.querySelector(`option[value="${book.status}"]`).selected = 'selected'
+    status.innerHTML += `<option value="Not read" ${(book.status=="Not red")?"selected":""}>Not read</option>`
+    status.innerHTML += `<option value="Reading" ${(book.status=="Reading")?"selected":""}>Reading</option>`
+    status.innerHTML += `<option value="Finished" ${(book.status=="Finished")?"selected":""}>Finished</option>`
     deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="trash-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
 
     status.addEventListener("change", () => book.setStatus(status.value));
