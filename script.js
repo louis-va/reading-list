@@ -70,27 +70,41 @@ function sortTable() {
 
 document.querySelector("form#add_book").onsubmit = (e) => {
     e.preventDefault();
-    let name = document.querySelector("input[name='name']").value;
-    let author = document.querySelector("input[name='author']").value;
-    let pages = parseInt(document.querySelector("input[name='pages']").value);
+
+    let titleInput = document.querySelector("input[name='title']");
+    let authorInput = document.querySelector("input[name='author']");
+    let pagesInput = document.querySelector("input[name='pages']");
+
+    let title = titleInput.value;
+    let author = authorInput.value;
+    let pages = parseInt(pagesInput.value);
     let read = document.getElementById("status").value;
-    new Book(name, author, pages, read);
-
-    document.querySelector("input[name='name']").value = "";
-    document.querySelector("input[name='author']").value = "";
-    document.querySelector("input[name='pages']").value = "";
-    document.getElementById("status").value = "Not read";
-
-    sortTable();
+    
+    // create book if all fields are filled
+    if(title && author && pages) {
+        new Book(title, author, pages, read);
+        titleInput.value = "";
+        authorInput.value = "";
+        pagesInput.value = "";
+        read = "Not read";
+        sortTable();
+    }
+    (!title) ? titleInput.classList.add('error') : titleInput.classList.remove('error');
+    (!author) ? authorInput.classList.add('error') : authorInput.classList.remove('error');
+    (!pages) ? pagesInput.classList.add('error') : pagesInput.classList.remove('error');
 }
 
-document.querySelector(".add-book-btn").addEventListener('click', () => {
-    document.querySelector(".add-book").classList.toggle('collapse');
-});
-
-let book1 = new Book('The Hobbit', 'J.R.R. Tolkien', 295, 'Finished');
+new Book('The Hobbit', 'J.R.R. Tolkien', 295, 'Finished');
 new Book('The Fellowship of the Ring', 'J.R.R. Tolkien', 452, 'Reading');
 new Book('The Two Towers', 'J.R.R. Tolkien', 632, 'Not read');
 new Book('The Return of the King', 'J.R.R. Tolkien', 345, 'Not read');
+new Book('The Hunger Games', 'Suzanne Collins', 549, 'Not read');
+new Book('To Kill a Mockingbird', 'Harper Lee', 254, 'Not read');
+new Book('Pride and Prejudice', 'Jane Austen', 709, 'Not read');
+new Book('Animal Farm', 'George Orwell', 156, 'Not read');
+new Book('Gone with the Wind', 'Margaret Mitchell', 631, 'Not read');
+new Book('Memoirs of a Geicha', 'Arthur Golden', 690, 'Not read');
+new Book('Alice in Wonderland', 'Lewis Caroll', 254, 'Not read');
+new Book('Fahrenheit 451', 'Ray Bradbury', 254, 'Not read');
 
 setTimeout(sortTable, 10);

@@ -13,9 +13,6 @@
         <div class="wrapper">
             <div class="header">
                 <h1>My reading list</h1>
-                <button class="add-book-btn">
-                    Add a book
-                </button>
             </div>
             <table class="sortable-theme-bootstrap" data-sortable>
                 <thead>
@@ -27,10 +24,10 @@
                         <th data-sortable="false" style="width:50px"></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr class="add-book collapse">
+                <tbody class="add-book">
+                    <tr>
                         <form id="add_book">
-                            <td><input type="text" id="name" name="name"></td>
+                            <td><input type="text" id="title" name="title"></td>
                             <td><input type="text" id="author" name="author"></td>
                             <td><input type="number" id="pages" name="pages"></td>
                             <td>
@@ -50,7 +47,6 @@
                         </form>
                     </tr>
                 </tbody>
-                <tbody><tr><td style="border: 0; padding: 0; padding-top: 1px;"></td></tr></tbody>
                 <tbody id="book_table"></tbody>
             </table>
         </div>
