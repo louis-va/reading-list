@@ -2,6 +2,21 @@
 
 // Data Structures
 
+const library = {
+    library: [],
+    id: 0,
+    addBook: function (book) {
+        this.library.push(book);
+    },
+    removeBook: function (bookId) {
+        this.library = this.library.filter(book => book.id != bookId);
+    },
+    newBookId: function () {
+        this.id++;
+        return "book_" + this.id;
+    }
+}
+
 function Book(title, author, pages, status) {
     this.id = library.newBookId();
     this.title = title;
@@ -13,26 +28,6 @@ function Book(title, author, pages, status) {
 Book.prototype.setStatus = function (status) {
     this.status = status;
 }
-
-function Library() {
-    this.library = [];
-    this.id = 0;
-}
-
-Library.prototype.addBook = function (book) {
-    this.library.push(book);
-}
-
-Library.prototype.removeBook = function (bookId) {
-    this.library = this.library.filter(book => book.id != bookId);
-}
-
-Library.prototype.newBookId = function () {
-    this.id++;
-    return "book_" + this.id;
-}
-
-const library = new Library();
 
 // User Interface
 
